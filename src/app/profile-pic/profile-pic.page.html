@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+  <ion-title class="ion-text-center">Profile Picture</ion-title>
+</ion-toolbar>
+</ion-header>
+
+ 
+<ion-content>
+
+<div>
+
+  <img  [src]="photo"  alt='assets/icon/avatar.jpg' onerror="this.src='assets/icon/avatar.jpg'">   
+</div>
+ 
+
+<ion-button class="skipbutton"  (click)="skippic()"  size="large">
+  <ion-icon  slot="end" name="play-skip-forward-sharp" color>    
+  </ion-icon>
+  Skip
+</ion-button>
+
+<ion-fab vertical="bottom" horizontal="end" slot ="fixed">
+  <ion-fab-button (click)="takePicture()">
+    <ion-icon name="camera"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-fab vertical="bottom" horizontal="start" slot ="fixed">
+  <ion-fab-button (click)="deleteimage()">
+    <ion-icon name="trash-outline"></ion-icon> 
+  </ion-fab-button>
+</ion-fab>
+
+<ion-fab vertical="bottom" horizontal="center" slot ="fixed">
+<ion-fab-button (click)="uploadImage()">
+  <ion-icon name= "cloud-upload-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+</ion-content> 
