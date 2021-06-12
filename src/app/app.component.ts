@@ -130,21 +130,22 @@ export class AppComponent {
     console.log('Data received', data);
     this.name = data.name;
     console.log('avatar before user service',data.avatar);
-    this.userService.retrieveAvatar(data.avatar).subscribe(
-      img => {
-        console.log('got response from server', img);
-        this.image=img;
+    // this.userService.retrieveAvatar(data.avatar).subscribe(
+    //   img => {
+    //     console.log('got response from server', img);
+    //     this.image=img;
       
         
-      },
-      error => {
-        console.log('error', error);  
-          const mess= "Unable to get profile image ";
-          this.toastService.presenterrorToast(mess);
-      }
-      );
-    // this.image = BookyConfig.getPath() + '/users/retrieveAvatar/' + data.avatar;
-    //       console.log('imageurl:', this.image);
+    //   },
+    //   error => {
+    //     console.log('error', error);  
+    //       const mess= "Unable to get profile image ";
+    //       this.toastService.presenterrorToast(mess);
+    //   }
+    //   );
+     //this.image = BookyConfig.getPath() + '/users/retrieveAvatar/' + data.avatar;
+     this.image = BookyConfig.getPath() + '/uploads/' + data.avatar;  
+     console.log('imageurl:', this.image);
        
  if(this.image){
   console.log('Data received', this.name);
