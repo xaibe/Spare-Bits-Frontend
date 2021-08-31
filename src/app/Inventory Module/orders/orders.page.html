@@ -1,0 +1,81 @@
+<ion-header>
+
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button  defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"> Orders </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <!-- <ion-item class="items">
+  <ion-button class="btns">
+    My Orders
+  </ion-button>
+
+  <ion-button class="btns">
+    Orders Recieved
+  </ion-button>
+</ion-item>
+
+<ion-item class="items">
+
+<ion-button class="btns">
+  Confirmed Orders
+</ion-button>
+
+
+<ion-button class="btns">
+Cancelled Orders
+</ion-button>
+</ion-item>
+
+<ion-item>
+  <ion-button>
+    Delivered orders
+  </ion-button>
+</ion-item>
+ -->
+<div class="mainDiv">
+  <div class="segmentdiv" (ionChange)="segmentChange($event)">
+
+<ion-segment mode="ios"[value]="segmentValue">
+  <ion-segment-button value="1">
+    <ion-label>MY ORDERS</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="2">
+    <ion-label>RECIEVED ORDERS</ion-label>
+  </ion-segment-button>
+
+</ion-segment>
+  </div>
+  
+  <ion-button id="btns" (click)="Neworders()">
+    <ion-icon slot="start" src="../assets/icon/order_icons/recieved.svg" class="iconss"  id="order"></ion-icon>
+     New Orders 
+  </ion-button>
+
+
+<ion-button id="btns" (click)="Confirmedorders()">
+  <ion-icon slot="start" src="../assets/icon/order_icons/confirm.svg" class="iconss" ></ion-icon>
+  Confirmed Orders
+</ion-button>
+
+
+<ion-button id="btns" (click)="Cancelledorders()">
+  <ion-icon slot="start" src="../assets/icon/order_icons/cancel.svg" class="iconss" ></ion-icon>
+Cancelled Orders
+</ion-button>
+
+  <ion-button id="btns" (click)="Deliveredorders()">
+    
+    <ion-icon slot="start" src="../assets/icon/order_icons/delivered.svg" class="iconss" ></ion-icon>
+    Delivered orders
+  </ion-button>
+
+</div>
+</ion-content>

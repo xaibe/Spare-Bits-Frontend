@@ -7,9 +7,11 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { AlertService } from '../sdk/custom/alert.service';
-import { BookyConfig } from 'src/sdk/booky.config';
+import { ProjectConfig } from 'src/sdk/Project.config';
 import{UserService} from 'src/sdk/core/user.service'
 import { ToastService } from '../sdk/custom/toast.service';
+import { BehaviorSubject } from 'rxjs';
+import { cartService } from 'src/sdk/custom/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -20,22 +22,42 @@ export class AppComponent {
   name;
   image;
   userexist = false;
+  cartItemCount = new BehaviorSubject(0);
+  
+  getitemnumber(){
+    this.cartItemCount=this.cartService.getCartItemCount();
+  };
   public appPages = [
     
+    {
+      title: 'Home',
+      url: '/home',
+      icon: 'home'
+    },
     {
       title: 'Profile',
       url: '/profile',
       icon: 'people'
     },
     {
-      title: 'My Posts',
-      url: '/myposts',
+      title: 'My Products',
+      url: '/products',
       icon: 'bookmarks'
     },
     {
       title: 'Chats',
       url: '/openchat',
       icon: 'chatbubbles'
+    },
+    {
+      title: 'Orders',
+      url: '/orders',
+      icon: 'clipboard'
+    },
+    {
+      title: 'Shopping Cart',
+      url: '/cart',
+      icon: 'cart'
     },
     {
       title: 'User Guide',
@@ -61,9 +83,10 @@ export class AppComponent {
     private router:Router,
     private userService:UserService,
     private toastService: ToastService,
+    private cartService:cartService
   ) { 
     this.initializeApp();
- 
+ this.cartItemCount=this.cartService.getCartItemCount();
   }
 
   initializeApp() {
@@ -144,7 +167,7 @@ export class AppComponent {
     //   }
     //   );
      //this.image = BookyConfig.getPath() + '/users/retrieveAvatar/' + data.avatar;
-     this.image = BookyConfig.getPath() + '/uploads/' + data.avatar;  
+     this.image = ProjectConfig.getPath() + '/uploads/' + data.avatar;  
      console.log('imageurl:', this.image);
        
  if(this.image){

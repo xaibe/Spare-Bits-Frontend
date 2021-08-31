@@ -74,11 +74,13 @@ private sideMenuService: SideMenuService,
         this.toastService.presentpositiveToast(data.message);
         this.loading = false;
         this.authService.saveTokenToStorage(token,data.token);
-       //to show name and pic on sidemenu
+        this.authService.saveTokenToStorage(sname,data.name);
+        //to show name and pic on sidemenu
        this.authService.saveTokenToStorage(semail,demail);
-        this.sideMenuService.publishSomeData(data);
-        
-        this.router.navigateByUrl('/books');
+       console.log("shiftin to sidemenu service"); 
+       this.sideMenuService.publishSomeData(data);
+        console.log("shiftin to products");
+        this.router.navigateByUrl('/home');
       },
       error => {
         

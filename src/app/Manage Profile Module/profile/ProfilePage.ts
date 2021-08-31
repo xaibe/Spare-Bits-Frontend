@@ -121,7 +121,7 @@ export class ProfilePage implements OnInit {
                     this.toastservice.presentpositiveToast(msg); 
                     this.clickedspinner = false;
                     console.log('got response from server', data);
-                    this.router.navigate(['books']);
+                    this.router.navigate(['home']);
                 },
                 error => {
                     console.log('error', error);

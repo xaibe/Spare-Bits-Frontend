@@ -1,24 +1,80 @@
 <ion-header>
-  <ion-toolbar>
+
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
+    <ion-title class="title" slot="secondary" size="2">
       Home
     </ion-title>
+    
+   <ion-searchbar   class="homeSearch"   (ionInput) ="mySearch($event)"  slot="secondary"  autocomplete="off"
+   autocorrect="off"
+   spellcheck="true"
+   animated="true" color="light" ></ion-searchbar>
+   <!-- autocomplete="true" spellcheck="true" -->
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
-  <ion-card class="welcome-card">
-    <img src="/assets/shapes.svg" alt="" />
-    <ion-card-header>
-      <ion-card-title>Welcome to Booky Ionic</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Now that your app has been created, you'll want to start building out features and components. Check out some
-        of the resources below for next steps.</p>
-    </ion-card-content>
-  </ion-card>
+  
+  <ion-label>{{this.emptyarray}}</ion-label>
+     <!-- (ionInput)="mySearch($event.target.value)"  -->
+   <!-- (search)="mySearch($event.target.value)"  -->
+  <ion-grid>
+    <ion-row>
 
+      <ion-col sizeLg="4" sizeMd="4" sizeXs="6" *ngFor="let product of products" class="line">
+<ion-row>
+  <ion-col size="12" >
+
+    <!-- <ion-thumbnail slot="start" > -->
+      <img  src="{{baseimageurl}}{{product.mainimage}}" failedUrl="image"  onerror="this.src='assets/icon/book.png'"/>
+       <!-- <ion-img *ngIf="!image ||  image=='null' " [src]="'assets/icon/book.png'">
+      </ion-img>          
+    </ion-thumbnail> -->
+
+  </ion-col>
+
+<ion-col size="12" >
+
+  <ion-label (click)="changeUrl(product)">
+  {{product.name}}
+  </ion-label>
+
+
+</ion-col>
+
+ <ion-col size="7">
+
+  <ion-label color="secondary">
+    <!-- {{"Rs"+ product.price}} -->
+  {{product.price|currency:'PKR'}}
+  </ion-label>  
+
+
+</ion-col> 
+
+ <ion-col size="2" class="buttonicon"  >
+
+  <ion-button fill="clear" size="small" >
+    <ion-icon name="heart" slot="end" class="heart"></ion-icon>
+  </ion-button>
+
+
+</ion-col>
+<ion-col size="2" class="ion-text-right">
+
+  <ion-button class="buttonicon" fill="clear" (click)="changeUrl(product)">
+  <ion-icon name="cart" ></ion-icon>
+</ion-button>  
+
+</ion-col>
+
+</ion-row>
+     
+</ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

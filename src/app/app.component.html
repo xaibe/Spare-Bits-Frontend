@@ -29,6 +29,7 @@
                         <ion-label>
                             {{p.title}}
                         </ion-label>
+                       <b color="secondary" *ngIf="(cartItemCount|async)!=0" >{{p.icon != "cart" ? null: cartItemCount| async }}</b> 
                     </ion-item>
                     <ion-item *ngIf="!p.url" (click)="logout()">
                         <ion-icon slot="start" [name]="p.icon"></ion-icon>

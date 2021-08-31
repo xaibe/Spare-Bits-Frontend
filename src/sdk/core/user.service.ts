@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { BookyConfig } from '../booky.config';
+import { ProjectConfig } from '../Project.config';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,51 +12,51 @@ export class UserService {
 
   public userLogin(credentials: object): Observable<any> {
     // this url will be http://localhost:3000/users/login
-    const url = BookyConfig.getPath() + '/users/login';
+    const url = ProjectConfig.getPath() + '/users/login';
 
     return this.http.post(url, credentials);
   }
 
   public userverifyemail(credentials,data): Observable<any> {
     // this url will be http://localhost:3000/users/login
-    const url = BookyConfig.getPath() + '/users/verifyEmail';
+    const url = ProjectConfig.getPath() + '/users/verifyEmail';
     const obj ={...credentials,...data};
     return this.http.post(url, obj);
   }
 
   public updatepassword(credentials,data): Observable<any> {
     // this url will be http://localhost:3000/users/login
-    const url = BookyConfig.getPath() + '/users/updatePassword';
+    const url = ProjectConfig.getPath() + '/users/updatePassword';
     const obj ={...credentials,...data};
     return this.http.post(url, obj);
   }
   public userRegister(credentials: object): Observable<any> {
-    const url = BookyConfig.getPath() + '/users/register';
+    const url = ProjectConfig.getPath() + '/users/register';
 
     return this.http.post(url, credentials);
   }
 
   public userForgotPassword(credentials: object): Observable<any> {
-    const url = BookyConfig.getPath() + '/users/sendmail';
+    const url = ProjectConfig.getPath() + '/users/sendmail';
     return this.http.post(url, credentials);
   }
 
    //getting single user
 public getSingleUser(email: String): Observable<any>{
-  const url = BookyConfig.getPath() + '/users/getsingleuser/' + email;
+  const url = ProjectConfig.getPath() + '/users/getsingleuser/' + email;
   return this.http.get(url);
 }
 
 
 public retrieveAvatar(avatar: String): Observable<any>{
-  const url = BookyConfig.getPath() + '/users/retrieveAvatar/' + avatar;
+  const url = ProjectConfig.getPath() + '/users/retrieveAvatar/' + avatar;
   console.log('url',url)
   return this.http.get(url);
 }
 
 //update user
 public UpdateUser(credentials: object, email: String): Observable<any> {
-  const url = BookyConfig.getPath() + '/users/updateuser/' + email;
+  const url = ProjectConfig.getPath() + '/users/updateuser/' + email;
 
   return this.http.put(url, credentials);
 }
@@ -70,7 +70,7 @@ public uploadAvatar(user_info: any ,email:any, image: any  /* user_id: any*/): O
   var file_location;
   var url;  
   
-     url = BookyConfig.getPath() + '/users/uploadimage/';
+     url = ProjectConfig.getPath() + '/users/uploadimage/';
      file_location = `profileimage-.${email}.${user_info.extension}`;  
   
      const formData: FormData = new FormData();
