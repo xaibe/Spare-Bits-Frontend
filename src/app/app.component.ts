@@ -45,8 +45,13 @@ export class AppComponent {
       icon: 'bookmarks'
     },
     {
+      title: 'My Store',
+      url: '/store',
+      icon: 'storefront'
+    },
+    {
       title: 'Chats',
-      url: '/openchat',
+      url: '/chats',
       icon: 'chatbubbles'
     },
     {
@@ -62,7 +67,7 @@ export class AppComponent {
     {
       title: 'User Guide',
       url: '/about',
-      icon: 'information-circle-outline'
+      icon: 'information-circle'
     },
     
     {
@@ -96,19 +101,6 @@ export class AppComponent {
       this.storage.clear();
       localStorage.removeItem('name');
 
-  //     this.sideMenuService.getObservable().subscribe((data) => {
-  //       console.log('Data received', data);
-  //       this.name = data.name;
-  //    if(this.name){
-  //     console.log('Data received', this.name);
-  //      this.userexist = true;
-  //    }
-  //  else{
-  //      this.userexist = false;
-  //    }
-        
-  //   });
-
     });
   }
 
@@ -117,70 +109,41 @@ export class AppComponent {
 
   ngDoCheck() {
 
-  //     this.sideMenuService.getObservable().subscribe((data) => {
-  //       console.log('Data received', data);
-  //       this.name = data.name;
-  //    if(this.name){
-  //     console.log('Data received', this.name);
-  //      this.userexist = true;
-  //    }
-  //  else{
-  //      this.userexist = false;
-  //    }
-        
-  //   });
-
-   
+ 
     }
   
    ngOnInit() {
-  //   try{
-  //     const semail="email";
-  //     this.authService.getTokenFromStorage(semail).then(data => {
-  //         this.fetchedemail = data;
-    
-  //         console.log('token email',this.fetchedemail);
-          
-  //       })
-  //         .catch(error => {
-  //            console.log('fethching error',error) });
-  //         }
-  //         catch (ex) {
-  //           console.log('ex', ex);
-  //       } 
   
   this.sideMenuService.getObservable().subscribe((data) => {
     console.log('Data received', data);
     this.name = data.name;
     console.log('avatar before user service',data.avatar);
-    // this.userService.retrieveAvatar(data.avatar).subscribe(
-    //   img => {
-    //     console.log('got response from server', img);
-    //     this.image=img;
-      
-        
-    //   },
-    //   error => {
-    //     console.log('error', error);  
-    //       const mess= "Unable to get profile image ";
-    //       this.toastService.presenterrorToast(mess);
-    //   }
-    //   );
-     //this.image = BookyConfig.getPath() + '/users/retrieveAvatar/' + data.avatar;
-     this.image = ProjectConfig.getPath() + '/uploads/' + data.avatar;  
-     console.log('imageurl:', this.image);
-       
- if(this.image){
-  console.log('Data received', this.name);
-  console.log('Data received', this.image);
-   this.userexist = true;
- }
-else{
-   this.userexist = false;
- }
     
+    console.log('name before user service',this.name);
+     try{
+      if(data.avatar===null||data.avatar===undefined){
+        if(data.name===null||data.name===undefined){
+          this.userexist=false;
+          console.log("user doestnot exists");
+        }
+        console.log("cant find image");        
+        this.userexist = true;
+      } 
+      else{
+        this.image = ProjectConfig.getPath() + '/uploads/' + data.avatar;  
+        console.log('imageurl:', this.image);
+        
+          console.log('Name received for sidemenu', this.name);
+          console.log('image received for sidemenu', this.image);
+           this.userexist = true;
+         
+        
+      }
+  }catch(ex){
+console.log("cant find image", ex);
+  }
+           
 });
-
     }
   
 
@@ -195,6 +158,5 @@ else{
     this.authService.logout();
     this.router.navigateByUrl('/login');    
   }
-  
-    
+
   }

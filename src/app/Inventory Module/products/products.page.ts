@@ -43,17 +43,7 @@ console.log("error in products fetching", Error);
 }
  
 baseimageurl  =   ProjectConfig.getPath()+"//uploadproduct//";  
-// baseimageurl= "http://localhost:3000//uploadproduct//";
- 
- public concatenate(str2:string) {
- var str3 = this.baseimageurl.concat(str2.toString());
- console.log("str3",str3);
- this.getSantizeUrl(str3);
- }
-public getSantizeUrl(url : string) {
-  console.log("sanitized",this.sanitizer.bypassSecurityTrustUrl(url));
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-}
+
 
   async getAll() {
     console.log('gett filter entered');
@@ -68,10 +58,7 @@ public getSantizeUrl(url : string) {
         console.log('Data Received', data);
 
         console.log('Products recieved', this.products);
-        
-        //  this.image = 'http://localhost:3000' + '/uploadproduct/' + data.name;  
-        //  console.log('imageurl:', this.image);
-
+   
       },
       err => {
         console.log('gett filter err', err);
@@ -90,9 +77,31 @@ public getSantizeUrl(url : string) {
         console.log('fetched profile email',this.email);
 
         console.log('before gett all');
+   
         this.getAll();
+   this.removestore();
       })
         .catch(error => { console.log('fethching error',error) });
+  }
+
+  removestore(){
+    
+    const store_name="storename";
+    const store_id="storeid";
+   
+    this.authService.removeTokenFromStorage(store_name).then(data => {
+     
+        console.log('store name removed',data);
+
+      })
+        .catch(error => { console.log('removing store name error',error) });
+    
+        this.authService.removeTokenFromStorage(store_id).then(data => {
+     
+          console.log('store id removed',data);
+  
+        })
+          .catch(error => { console.log('removing store id error',error) });
   }
 
   async openAddModal(product?: Products) {
@@ -112,7 +121,7 @@ public getSantizeUrl(url : string) {
     this.selectedProduct = product;
     const alert = await this.alertController.create({
       header: 'Confirm!',
-      message: `Are you sure you want to delete the book "${product.name}"`,
+      message: `Are you sure you want to delete the product "${product.name}"`,
       buttons: [
         {
           text: 'Cancel',
@@ -164,8 +173,11 @@ interface Products {
   mainimage:string;
   stock:number;
   image_url:[];
+  sellername:string,
   Delivery_Charges:number;
   Orders:[{}];
+  store_name:string,
+      store_id:string,
   catageory:string;
   Feedback:[{}];
   subCatageory:string;

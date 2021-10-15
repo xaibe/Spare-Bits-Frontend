@@ -29,6 +29,9 @@ public async getItemFromStorage(name:string){
   public async getTokenFromStorage(name:string) {
     return await this.storage.get(name);
   }
+  public async removeTokenFromStorage(name:string) {
+    return await this.storage.remove(name);
+  }
 public clearLocalStorage()
 {
   this.storage.clear();

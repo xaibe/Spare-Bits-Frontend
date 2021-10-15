@@ -7,12 +7,10 @@ ion-button{
     --background: #062f77;
 }
 
-
- ion-content.background{
-     --background: url('/assets/icon/logo.jpg') 0 0/100% 55% no-repeat;
- }
-
- #txtareas {
+ion-content.background{
+    --background: url('/assets/icon/logo_size.jpg') 40% 0/80% 45% no-repeat;
+}
+#txtareas {
     position: relative;
     top: 210px;
     bottom: 0px;

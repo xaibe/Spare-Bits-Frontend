@@ -5,6 +5,7 @@ import { ProductsService } from '../../sdk/core/products.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { ProjectConfig } from 'src/sdk/Project.config';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -45,8 +46,7 @@ console.log("error in products fetching", Error);
   }
 }
  
-  
- baseimageurl= "http://localhost:3000//uploadproduct//";
+ baseimageurl= ProjectConfig.getPath()+"//uploadproduct//";
  
  
 
@@ -192,6 +192,7 @@ interface Products {
   discription: string;
   mainimage:string;
   stock:number;
+  sellername:string,
   image_url:[];
   catageory:string;
   subCatageory:string,

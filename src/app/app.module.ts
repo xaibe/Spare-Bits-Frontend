@@ -13,15 +13,10 @@ import { NgModule } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { ProjectConfig } from 'src/sdk/Project.config';
 
-// const config = {
-//    apiKey: "AIzaSyCpvvwHFkyBF1JdKPJDYIaYvKe60sy9Lqc",
-//    authDomain: "sparebits-a2638.firebaseapp.com",
-//    projectId: "sparebits-a2638",
-//    storageBucket: "sparebits-a2638.appspot.com",
-//    messagingSenderId: "392880281736",
-//    appId: "1:392880281736:web:da80c648db2b54d77c673d"
-//  };
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: ProjectConfig.getPath(), options: {} };
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +26,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
    // AngularFireModule.initializeApp(config),
   // AngularFireAuthModule,
     IonicModule.forRoot(),
+    SocketIoModule.forRoot(config),
     IonicStorageModule.forRoot(),
     HttpClientModule,
     AppRoutingModule

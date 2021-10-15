@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
-import { UserService } from '../../../../sdk/core/user.service';
 import { AuthService } from '../../../../sdk/core/auth.service';
-import { AlertService } from '../../../../sdk/custom/alert.service';
 import { Platform } from '@ionic/angular';
-
+import { UserService } from '../../../../sdk/core/user.service';
+import {ToastService} from'src/sdk/custom/toast.service';
 @Component({
   selector: 'app-forgotpassword',
   templateUrl: './forgotpassword.page.html',
@@ -18,14 +17,11 @@ export class ForgotpasswordPage implements OnInit {
   constructor(
     private platform: Platform,
     private router: Router,
+    private service: UserService,
+    private toastService :ToastService,
     private formBuilder: FormBuilder,
-     private service: UserService,
-     private authService:AuthService, 
-     private alertservice: AlertService) { 
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      console.log('Handler was called!');
-      this.router.navigate(['home']);
-    });
+     private authService:AuthService, ) { 
+   
    }
   clicked = false;
   ngOnInit() {
@@ -47,9 +43,11 @@ export class ForgotpasswordPage implements OnInit {
     console.log('ForgotPaswordData:', forgotData);
     //console.log('email:', authemail);
 
-    this.service.userForgotPassword(forgotData).subscribe(
+      this.service.userForgotPassword(forgotData).subscribe(
+
       data => {
-        this.alertservice.presentAlertConfirm("Email Sent! Check your email","Success!");
+        
+this.toastService.presentpositiveToast("Email Sent! Check your email,Success!");
         this.authService.saveTokenToStorage(semail,forgotData);
       // this.authService.SetItemtoStorage(semail,authemail);
         this.clicked = false;
@@ -57,12 +55,31 @@ export class ForgotpasswordPage implements OnInit {
         this.router.navigateByUrl('/verifyEmail');
       },
       error => {
-        this.alertservice.presentAlertConfirm("Cannot Send Email! Server Down","Failed!");
-        this.clicked = false;
-      }
+        console.log("error message",error.message);
+        console.log("error ",error.error.message);
+        if(error.error.message=== "This user doesnot exists. Please signup first")
+
+        {
+this.toastService.presenterrorToast(error.error.message);
+ this.forgotPasswordForm.reset();
+ this.loading=false;
+ this.clicked=false;
+  this.ngOnInit();
+}
+else{
+  const message="Cannot Send Email! Server Down ,Failed!";
+        this.toastService.presenterrorToast(message);
+        this.forgotPasswordForm.reset();
+        this.loading=false;
+        this.clicked=false;
+        this.ngOnInit();
+      }  
+        
+        }
     );
     } catch (ex) {
         console.log('ex', ex);
       }
   }
 }
+

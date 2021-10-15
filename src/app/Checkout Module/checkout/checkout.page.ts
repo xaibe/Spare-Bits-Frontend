@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ToastService } from 'src/sdk/custom/toast.service';
 import { ProductsService } from 'src/sdk/core/products.service';
 import { AppComponent } from 'src/app/app.component';
+import { ProductsPageRoutingModule } from 'src/app/Inventory Module/products/products-routing.module';
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.page.html',
@@ -24,6 +25,7 @@ export class CheckoutPage implements OnInit {
   hid:Boolean;
 buyerAddress;
 buyerphone;
+sellername
 currentdate;
 date;
 datetime;
@@ -61,22 +63,6 @@ CheckoutForm: FormGroup;
     });
   }
  getDateTime(){
-//   this.currentdate = new Date(); 
-//    console.log("currentdate = ", this.currentdate)
-//   this.datetime =  this.currentdate.getDate() + "-"
-//                  + (this.currentdate.getMonth()+1)  + "-" 
-//                  + this.currentdate.getFullYear() + "T"   
-//                  + this.currentdate.getHours() + ":"  
-//                  + this.currentdate.getMinutes() + ":" 
-//                  + this.currentdate.getSeconds(); + "+" 
-//                  +"00" +":"+"00";
-
-//     console.log("datetime = ", this.datetime);
-   
-   // 2021-08-22T19:00:00.000+00:00
-//this.datee = new Date().toLocaleDateString();
- //console.log("latest date" , this.datee);
-// //this.currentdate = new Date().toLocaleDateString();
 this.currentdate = new Date(); 
  console.log("currentdate = ", this.currentdate)
  this.date =   this.currentdate.getDate() + "/"
@@ -108,12 +94,14 @@ twelveHours (){
   Paynow(){
 //need to check if payment method is cash or easypaisay if easypaisa then deduct the amount from easypaisa account using given number
     this.getDateTime();
+    let productid;
     let productname;
     let ordertoemail;
     let orderbyemail;
     let Address;
     let Phonenumber; 
     let TotalAmount;
+    let sellername;
     let productCount;
     let paymentType ;
     let date ;
@@ -122,8 +110,9 @@ let confirm;
     for(let pro of this.cart){
 
         orderbyemail=this.BuyerEmail;
-      
-
+     
+        ordertoemail=pro.email;
+   
       if (this.default===true)
       {
         Address=this.buyerAddress;
@@ -137,30 +126,41 @@ let confirm;
          console.log("address",Address);
          console.log("phone",Phonenumber);
       }
-      ordertoemail=pro.email;  
-      productname=pro.name;
-      productCount=pro.amount;
-      TotalAmount=productCount*pro.price;
+      sellername=pro.sellername
+      console.log("sellername",sellername);
    
-    var obj = {  orderbyemail: orderbyemail,Address:Address,
-                 Phonenumber:Phonenumber,confirm:false,cancelled:false,
-                 Delivered:false,mainimage:pro.mainimage,
-                 ordertoemail:ordertoemail,
-                  productname:productname,TotalAmount:TotalAmount,
-                  productCount:productCount,paymentType:this.radiobtn,
-                  Date:this.date,Time:this.time
+      if(sellername!=null && sellername!=undefined){
+   
+        productname=pro.name;
 
-}
-if(orderbyemail===ordertoemail){
-  const msg = "Failed! Can't order your own product";
-  this.toastService.presenterrorToast(msg);       
-  this.cartservice.resetCart();
-  this.router.navigateByUrl('/home');    
-}
-else{
-console.log("obj=",obj);
-    this.createorder(obj);
-}
+        productCount=pro.amount;
+        productid=pro._id;
+        TotalAmount=productCount*pro.price;
+   
+      var obj = {  orderbyemail: orderbyemail,
+        sellername:sellername,
+        Address:Address,
+                   Phonenumber:Phonenumber,confirm:false,cancelled:false,
+                   Delivered:false,mainimage:pro.mainimage,
+                   ordertoemail:ordertoemail,
+               productid:productid,
+                   productname:productname,TotalAmount:TotalAmount,
+                    productCount:productCount,paymentType:this.radiobtn,
+                    Date:this.date,Time:this.time
+  
+  }
+  if(orderbyemail===ordertoemail){
+    const msg = "Failed! Can't order your own product";
+    this.toastService.presenterrorToast(msg);       
+    this.cartservice.resetCart();
+    this.router.navigateByUrl('/home');    
+  }
+  else{
+  console.log("obj=",obj);
+      this.createorder(obj);
+  }
+      }   
+
       };
   
 }
@@ -225,8 +225,6 @@ async getuserdata(){
       console.log('gett all err', err);
     }
   );
- 
- 
 }
 
  getemail(){

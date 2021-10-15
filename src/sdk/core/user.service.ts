@@ -46,7 +46,10 @@ public getSingleUser(email: String): Observable<any>{
   const url = ProjectConfig.getPath() + '/users/getsingleuser/' + email;
   return this.http.get(url);
 }
-
+public getSingleUserbyid(_id): Observable<any>{
+  const url = ProjectConfig.getPath() + '/users/getsingleuserbyid/' + _id;
+  return this.http.get(url);
+}
 
 public retrieveAvatar(avatar: String): Observable<any>{
   const url = ProjectConfig.getPath() + '/users/retrieveAvatar/' + avatar;

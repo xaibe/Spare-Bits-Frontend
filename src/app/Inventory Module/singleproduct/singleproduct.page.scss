@@ -16,6 +16,10 @@ min-width: 25px;
 z-index:10;
 }
 
+.chat{
+padding-left: 20px;
+}
+
 ion-card-title{
     size:"500px";
 }
@@ -25,10 +29,15 @@ ion-card-title{
 .price{
     height: 100px;
 }
-.feedback{
-height: 200px;
-}
+
+// .feedback{
+// height: 200px;
+// }
 .pricelabel{
 
     height: 99px;
 }
+// .proname{
+//  padding-left: 150;
+   
+// }

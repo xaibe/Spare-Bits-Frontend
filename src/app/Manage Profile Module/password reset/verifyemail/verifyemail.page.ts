@@ -4,11 +4,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { UserService } from '../../../../sdk/core/user.service';
 import { AuthService } from '../../../../sdk/core/auth.service';
-import { AlertService } from '../../../../sdk/custom/alert.service';
 import { Platform } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-
+import { ToastService } from 'src/sdk/custom/toast.service';
 @Component({
   selector: 'app-verifyemail',
   templateUrl: './verifyemail.page.html',
@@ -20,13 +19,13 @@ export class VerifyemailPage implements OnInit {
   verifyForm: FormGroup;
   fetchedData: void;
   constructor(
+    private toastService:ToastService,
     private platform: Platform,
     private router: Router,
     private authService: AuthService,
     private formBuilder: FormBuilder,
      private service: UserService,
-     private toastController:ToastController, 
-     private alertservice: AlertService) { 
+     private toastController:ToastController) { 
     this.platform.backButton.subscribeWithPriority(10, () => {
       console.log('Handler was called!');
       this.router.navigate(['/forgotpassword']);
@@ -47,7 +46,8 @@ export class VerifyemailPage implements OnInit {
 subscrib(fetchedData,verifyData){
   this.service.userverifyemail(this.fetchedData,verifyData).subscribe(
     data => {
-    this.alertservice.presentAlertConfirm("Your Email is verified","Success!");
+      const msg="Your Email is verified,Success!";
+      this.toastService.presentpositiveToast(msg);
     this.clicked=false;  
      this.router.navigateByUrl('/changepassword');
     },
@@ -55,8 +55,7 @@ subscrib(fetchedData,verifyData){
     error => {      
       
       this.clicked=false;      
-      this.alertservice.presentAlertOnly("Please Enter A Valid Verification Code","Failed!");
-     
+      this.toastService.presenterrorToast("Please Enter A Valid Verification Code , Failed!");    
       
     }
     );

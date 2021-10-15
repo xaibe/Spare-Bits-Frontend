@@ -29,6 +29,15 @@ export class ProductsService {
     }); 
   } 
 
+  public async filterProductbystoreid(_id): Promise<any> {    
+    const atoken='token';
+    const token = await this.authService.getTokenFromStorage(atoken);
+    const url = ProjectConfig.getPath() + `/Products/filterbystore/`+_id;
+    return this.http.get(url,{
+      headers: new HttpHeaders().set('Authorization', token)
+    }); 
+  } 
+
   public async feedback(name,data): Promise<any> {
     const atoken='token';
     const token = await this.authService.getTokenFromStorage(atoken);

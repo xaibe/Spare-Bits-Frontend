@@ -44,6 +44,8 @@ categeorydup:any=[];
 categeory:any=[];
 subcategeory:any=[];
 multipleImages:[]=[];
+ store_name
+ store_id
 
     ngOnInit() {
       this.categeory= this.categeoryservice.getCategeory();
@@ -70,8 +72,11 @@ multipleImages:[]=[];
       discription: [null, [Validators.required]],
       catageory:[null],
       subCatageory:[null],
+     sellername:[],
       email:[],
       stock:[],
+      store_name:[],
+      store_id:[],
       is_deleted: [false, [Validators.required]],
       image_url:[],
       mainimage:[]
@@ -85,10 +90,37 @@ multipleImages:[]=[];
        this.email = data;
        this.addNewProductForm.controls['email'].setValue(this.email);
         console.log('fetched profile email',this.email);
+        this.getstore();
       })
         .catch(error => { console.log('fethching error',error) });
   }
 
+  getstore(){
+    const store_name="storename";
+const store_id="storeid";
+this.authservice.getTokenFromStorage(store_name).then(data => {
+  console.log('fetched data',data);
+  this.store_name= data;
+  console.log('fetched store name',this.store_name);
+  if(this.store_name!=null){
+    this.addNewProductForm.controls['store_name'].setValue(this.store_name);
+    
+  }
+ })
+   .catch(error => { console.log('fethching error',error) });
+    
+   this.authservice.getTokenFromStorage(store_id).then(data => {
+    this.store_id= data;
+    console.log('fetched data',data);
+    console.log('fetched store id',this.store_id);
+  if(this.store_id!=null){
+    this.addNewProductForm.controls['store_id'].setValue(this.store_id);
+     console.log('fetched store id',this.store_id); 
+  }
+   })
+     .catch(error => { console.log('fethching error',error) });
+      
+  }
   onChange(event){
     console.log("before onselect",this.subcategeory);
 this.subcategeory=this.categeoryservice.getsubCategeory().filter(e=> e.id== event.target.value);
@@ -116,6 +148,7 @@ console.log("after updating catagory name",cata);
     console.log("catageoryformvalue",cat);
     const scat =this.addNewProductForm.controls['subCatageory'].value;
     console.log("subcatageoryformvalue",scat);
+    
     const observable = await this.productsService.addNewProduct(this.addNewProductForm.value);
     observable.subscribe(
        data => {
@@ -210,8 +243,13 @@ console.log("after updating catagory name",cata);
                     //optional
                     this.modalCtrl.dismiss();
                                     
-            
-                 this.router.navigateByUrl('/products');
+ if (this.store_id==null){
+  this.router.navigateByUrl('/products');
+   
+ } 
+ else{
+  this.router.navigateByUrl('/store');
+ }          
               }
               else{ 
                 const messag="Failed! Please check your connection and try again!";
@@ -276,9 +314,22 @@ else
 
 
   dismiss() {
-    this.modalCtrl.dismiss({
-      dismissed: true
-    });
+    if (this.store_id==null){
+      this.modalCtrl.dismiss({
+        dismissed: true
+      });
+      this.router.navigateByUrl('/products');
+       
+     } 
+     else{
+      this.modalCtrl.dismiss({
+        dismissed: true
+      });
+      this.router.navigateByUrl('/store');
+     
+    }          
+        
+    
   }
 
 }

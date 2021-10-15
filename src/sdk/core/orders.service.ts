@@ -61,6 +61,34 @@ export class OrdersService {
     });
   }
 
+  public async cancelOrderDelivery(_id,cancel): Promise<any> {
+    const url = ProjectConfig.getPath() + '/Orders/cancelorderdelivery/'+ _id  ;
+ 
+     return this.http.put(url, cancel);
+  
+    }
+
+  public async confirmOrderDelivery(_id,confirm): Promise<any> {
+    const url = ProjectConfig.getPath() + '/Orders/confirmorderdelivery/'+ _id  ;
+ 
+     return this.http.put(url, confirm);
+  
+    }
+  
+  public async cancelOrder(_id,cancel): Promise<any> {
+    const url = ProjectConfig.getPath() + '/Orders/cancelorder/'+ _id  ;
+ 
+     return this.http.put(url, cancel);
+  
+    }
+
+  public async confirmOrder(_id,confirm): Promise<any> {
+    const url = ProjectConfig.getPath() + '/Orders/confirmorder/'+ _id  ;
+ 
+     return this.http.put(url, confirm);
+  
+    }
+
   public async updateOrder(_id,data): Promise<any> {
     const atoken='token';
     const url = ProjectConfig.getPath() + '/Orders/'+ _id ;
@@ -71,9 +99,9 @@ export class OrdersService {
     });
   }
 
-  public async deleteProduct(id: string): Promise<any> {
+  public async deleteOrder(_id): Promise<any> {
     const atoken='token';
-    const url = ProjectConfig.getPath() + `/Products/${id}`;
+    const url = ProjectConfig.getPath() + '/Orders/'+ _id;
     const token = await this.authService.getTokenFromStorage(atoken);
 
     return this.http.delete(url, {

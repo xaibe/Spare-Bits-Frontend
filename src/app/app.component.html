@@ -11,7 +11,8 @@
  
             <ion-header class="bar-profile">
                 <div id="main-content" *ngIf="userexist" class="profile">
-                    <img class="profile-picture" [src]="image" width="150px" height="150px" />
+                    <img class="profile-picture" [src]="image" width="150px" height="150px" 
+                    onerror="this.onerror=null;this.src='../assets/icon/avatar.jpg';"/>
                     <h3 class="name" style="font-family: sans-serif;color: white; size: 14px;">{{name}}</h3>
                 </div>
                 <div *ngIf="!userexist" class="profile">
@@ -31,6 +32,8 @@
                         </ion-label>
                        <b color="secondary" *ngIf="(cartItemCount|async)!=0" >{{p.icon != "cart" ? null: cartItemCount| async }}</b> 
                     </ion-item>
+
+
                     <ion-item *ngIf="!p.url" (click)="logout()">
                         <ion-icon slot="start" [name]="p.icon"></ion-icon>
                         <ion-label>
