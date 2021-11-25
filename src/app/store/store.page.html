@@ -3,7 +3,7 @@
       <ion-buttons slot="start">
         <ion-back-button   defaultHref="home"></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center">My Store</ion-title>
+      <ion-title *ngIf="singlestore" class="ion-text-center">My Store</ion-title>
       <ion-button *ngIf="!singlestore" slot="end" (click)="openAddModal()" color="success">
         Create Store </ion-button>
         <ion-button *ngIf="singlestore" slot="end" (click)="openEditPopup(singlestore)" color="success">
@@ -123,7 +123,7 @@
 
 <ion-content  *ngIf="!singlestore" >
  
-  <ion-icon class="emptypageicon" name="storefront" fill ="clear" ></ion-icon>
+  <ion-icon class="emptypageicon" name="storefront-outline" fill ="clear" ></ion-icon>
   <br>
- <ion-label class="emptypagetext" color="secondary">Create A Store now</ion-label>
+ <ion-label class="emptypagetext" color="secondary">Store Not Found</ion-label>
 </ion-content>

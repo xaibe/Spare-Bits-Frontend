@@ -61,7 +61,6 @@ const routes: Routes = [
     loadChildren: () => import('./Manage Profile Module/profile/profile.module').then( m => m.ProfilePageModule)
   },   {
     path: 'profile-pic',
-    canActivate: [IsLoginGuard],
     loadChildren: () => import('./profile-pic/profile-pic.module').then( m => m.ProfilePicPageModule)
   },
   {

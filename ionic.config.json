@@ -1,7 +1,8 @@
 {
-  "name": "sparebtis",
+  "name": "sparebitsUser",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

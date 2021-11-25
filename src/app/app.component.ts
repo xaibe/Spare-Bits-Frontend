@@ -154,9 +154,17 @@ console.log("cant find image", ex);
   }
   
   logout(){
-  this.alertService.presentAlertConfirm("Logged Out Successfully!", "Success");
-    this.authService.logout();
-    this.router.navigateByUrl('/login');    
+    
+    this.userexist = false;
+    this.name="";
+    this.image="";
+    const msg="Logged Out Successfully!";
+    this.storage.clear();
+    localStorage.removeItem('name');
+    localStorage.removeItem('avatar');
+    this.toastService.presentpositiveToast(msg);
+    this.authService.logout();    
+
   }
 
   }

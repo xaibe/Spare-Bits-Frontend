@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.0.1",
+  "name": "SpareBitsUser",
+  "version": "0.0.2",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -62,5 +62,5 @@
     "tslint": "~6.1.0",
     "typescript": "~4.3.5"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project of users"
 }

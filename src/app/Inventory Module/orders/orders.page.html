@@ -11,35 +11,7 @@
 
 <ion-content>
 
-  <!-- <ion-item class="items">
-  <ion-button class="btns">
-    My Orders
-  </ion-button>
 
-  <ion-button class="btns">
-    Orders Recieved
-  </ion-button>
-</ion-item>
-
-<ion-item class="items">
-
-<ion-button class="btns">
-  Confirmed Orders
-</ion-button>
-
-
-<ion-button class="btns">
-Cancelled Orders
-</ion-button>
-</ion-item>
-
-<ion-item>
-  <ion-button>
-    Delivered orders
-  </ion-button>
-</ion-item>
- -->
-<div class="mainDiv">
   <div class="segmentdiv" (ionChange)="segmentChange($event)">
 
 <ion-segment mode="ios"[value]="segmentValue">
@@ -52,8 +24,9 @@ Cancelled Orders
   </ion-segment-button>
 
 </ion-segment>
-  </div>
-  
+
+</div>  
+<div class="mainDiv">
   <ion-button id="btns" (click)="Neworders()">
     <ion-icon slot="start" src="../assets/icon/order_icons/recieved.svg" class="iconss"  id="order"></ion-icon>
      New Orders 
@@ -78,4 +51,5 @@ Cancelled Orders
   </ion-button>
 
 </div>
+
 </ion-content>

@@ -15,7 +15,7 @@ export class ToastService {
     //color: 'danger',
     position: 'bottom',
     cssClass: 'errorToast',
-    duration: 2000,
+    duration: 3500,
     buttons: [
       { 
         side: 'end',

@@ -4,7 +4,6 @@
 // }
 
 #btns{
- width: 500px;
      height:100px;
     
 }
@@ -20,8 +19,11 @@
 
 .segmentdiv{
 padding-top: 50px;
+
 padding-bottom: 50px;
-    background: var(--ion-color-light);
+padding-left: 10px;
+padding-right: 10px;
+background: var(--ion-color-light);
     ion-segment{
     --background: var(--ion-color-primary);
       border-radius: 20px;
@@ -46,10 +48,12 @@ padding-bottom: 50px;
 
 .mainDiv{
     margin: auto;
-    text-align: center;
-    display: flex;
-    justify-content:center;
-    display: grid;
+    padding-left: 10px;
+    padding-right: 10px;
+    //text-align: center;
+    //display: flex;
+  //  justify-content:center;
+     display: grid;
 }
 
 .items{

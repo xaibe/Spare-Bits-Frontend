@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-
+import { ProjectConfig } from 'src/sdk/Project.config';
 import { SideMenuService } from './../../../sdk/core/sidemenu.service';
 import { AuthService } from './../../../sdk/core/auth.service';
 import { FormGroup } from '@angular/forms';
@@ -26,7 +26,8 @@ private sideMenuService: SideMenuService,
   loading = false;
   clicked =false;
 userid
-  ngOnInit() {
+check 
+ngOnInit() {
     this.clicked = false;
     this.formInitializer();
   }
@@ -118,7 +119,8 @@ loginuser(){
   },
   error => {
     
-    if(error.message=="Http failure response for http://localhost:3000/users/login: 0 Unknown Error")
+    this.check  =   "Http failure response for"+ ProjectConfig.getPath()+ " /users/login: 0 Unknown Error" ;
+    if(error.message===this.check)
     {
       this.loginForm.reset()
       this.clicked=false;
