@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="login"></ion-back-button>
+    </ion-buttons>
     <ion-title class="ion-text-center"> Register</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -8,33 +11,70 @@
   <form [formGroup]="registerForm">
     <ion-grid>
       <ion-row color="justify-content-center">
-        <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+        <ion-col
+          class="ion-align-self-center"
+          size-md="6"
+          size-lg="5"
+          size-xs="12"
+        >
           <div class="ion-text-center">
             <h3>Create your account!</h3>
           </div>
           <div class="ion-padding">
             <ion-item>
-              <ion-input name="name" formControlName="name" type="text" placeholder="Name"></ion-input>
+              <ion-input
+                name="name"
+                formControlName="name"
+                type="text"
+                placeholder="Name"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input name="email" formControlName="email" type="email" placeholder="your@email.com"></ion-input>
+              <ion-input
+                name="email"
+                formControlName="email"
+                type="email"
+                placeholder="your@email.com"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input name="mnumber" type="tel" pattern="[0-9]*" placeholder="Mobile Number" maxlength="11" formControlName="mnumber"></ion-input>
-          </ion-item>
-          <ion-item>
-              <ion-input name="address" type="text" placeholder="Address" formControlName="address"></ion-input>
-          </ion-item>
-            <ion-item>
-              <ion-input name="password" formControlName="password" type="password" placeholder="Password"></ion-input>
+              <ion-input
+                name="mnumber"
+                type="tel"
+                pattern="[0-9]*"
+                placeholder="Mobile Number"
+                maxlength="11"
+                formControlName="mnumber"
+              ></ion-input>
             </ion-item>
             <ion-item>
-              <ion-input name="password" formControlName="confirm_password" type="password" placeholder="Password">
+              <ion-input
+                name="address"
+                type="text"
+                placeholder="Address"
+                formControlName="address"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                name="password"
+                formControlName="password"
+                type="password"
+                placeholder="Password"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                name="password"
+                formControlName="confirm_password"
+                type="password"
+                placeholder="Password"
+              >
               </ion-input>
             </ion-item>
           </div>
-         
-           <!-- <div>
+
+          <!-- <div>
             <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Image</button>
             <input type="file" #filePicker (change)="onImagePicked($event)">
           </div>
@@ -44,9 +84,8 @@
             </ion-button>
           </div>  -->
 
-           
           <!-- code from sir alamgir -->
-           <!-- <div >
+          <!-- <div >
   <ion-item>
   <ion-input type="file" #inputFile style="display:none" (change)="onFileChange($event)" ></ion-input>
   <img [src]="userInfo?.avatar" class="fixed-size" onError="this.src='assets/images/placeholder.jpg'" />
@@ -58,17 +97,18 @@
 </ion-button>
 
 </div> -->
-<div class="ion-padding">
-  <ion-button  [disabled]="registerForm.invalid" (click)="save()" color="primary" type="submit"
-    >Register
-    <ion-spinner name="bubbles" *ngIf="clicked"></ion-spinner>
-  </ion-button>
-  <ion-button  (click)="login()" color="primary" 
-    >Login
-  </ion-button>
-</div>
-        </ion-col>          
-        
+          <div class="ion-padding">
+            <ion-button (click)="login()" color="primary">Login </ion-button>
+            <ion-button
+              [disabled]="registerForm.invalid"
+              (click)="save()"
+              color="primary"
+              type="submit"
+              >Register
+              <ion-spinner name="bubbles" *ngIf="clicked"></ion-spinner>
+            </ion-button>
+          </div>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </form>
