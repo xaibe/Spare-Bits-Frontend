@@ -1,21 +1,21 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 //import { AngularFireModule } from '@angular/fire';
 //import { AngularFireAuthModule } from '@angular/fire/auth';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorInterceptor } from 'src/sdk/core/httpinterceptor.service';
-import { IonicStorageModule } from '@ionic/storage';
-import { Camera } from '@ionic-native/Camera/ngx';
-import { NgModule } from '@angular/core';
-import { RouteReuseStrategy } from '@angular/router';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { ProjectConfig } from 'src/sdk/Project.config';
-
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { BrowserModule } from "@angular/platform-browser";
+import { ErrorInterceptor } from "src/sdk/core/httpinterceptor.service";
+import { IonicStorageModule } from "@ionic/storage";
+import { Camera } from "@ionic-native/Camera/ngx";
+import { NgModule } from "@angular/core";
+import { RouteReuseStrategy } from "@angular/router";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { ProjectConfig } from "src/sdk/Project.config";
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 const config: SocketIoConfig = { url: ProjectConfig.getPath(), options: {} };
 
 @NgModule({
@@ -23,24 +23,26 @@ const config: SocketIoConfig = { url: ProjectConfig.getPath(), options: {} };
   entryComponents: [],
   imports: [
     BrowserModule,
-   // AngularFireModule.initializeApp(config),
-  // AngularFireAuthModule,
+    // AngularFireModule.initializeApp(config),
+    // AngularFireAuthModule,
     IonicModule.forRoot(),
     SocketIoModule.forRoot(config),
     IonicStorageModule.forRoot(),
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
-    StatusBar,Camera,
+    StatusBar,
+    Camera,
+    InAppBrowser,
     SplashScreen,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
-      multi: true
+      multi: true,
     },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
