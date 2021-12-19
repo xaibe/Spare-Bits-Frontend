@@ -36,6 +36,30 @@
   </div> -->
 
 <ion-content>
+  <ion-toolbar>
+    <ion-searchbar
+      class="homeSearch"
+      (ionInput)="mySearch($event)"
+      slot="secondary"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="true"
+      [disabled]="!notfound"
+      animated="true"
+      color="light"
+      placeholder="Search By Product Name"
+    ></ion-searchbar>
+    <!-- autocomplete="true" spellcheck="true"  -->
+  </ion-toolbar>
+
+  <ion-label class="labelclass" [hidden]="emptyarray">
+    Sorry! Can Not Find Any Match !
+  </ion-label>
+
+  <ion-label class="labelclass" [hidden]="notfound">
+    Sorry! You have not Added Any Poduct Yet!
+  </ion-label>
+
   <ion-grid>
     <ion-row>
       <ion-col
@@ -59,7 +83,9 @@
           </ion-col>
 
           <ion-col size="12">
-            <ion-label> {{product.name}} </ion-label>
+            <ion-label (click)="changeUrl(product)">
+              {{product.name}}
+            </ion-label>
           </ion-col>
 
           <ion-col size="7">
@@ -88,6 +114,27 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <div *ngIf="loading">
+    <ion-list>
+      <ion-item *ngFor="let item of skeletonlist">
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
 <!-- 
   <ion-item *ngFor="let product of products">
@@ -126,27 +173,3 @@
           </div>
         </ion-col>
  -->
-
-<!-- <div *ngIf="loading">
-
-    <ion-list>
-      <ion-item *ngFor="let item of skeletonlist">
-        <ion-thumbnail slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-thumbnail>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-
-    </ion-list>
-  </div>
-</ion-content> -->

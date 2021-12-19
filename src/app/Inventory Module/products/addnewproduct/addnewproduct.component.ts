@@ -12,6 +12,7 @@ import { ProductsService } from "../../../../sdk/core/products.service";
 import { ReturnStatement, TmplAstRecursiveVisitor } from "@angular/compiler";
 import { waitForAsync } from "@angular/core/testing";
 import { __await } from "tslib";
+import { WhiteSpaceValidator } from "src/sdk/custom/whitespacevalidator.service";
 @Component({
   selector: "app-addnewproduct",
   templateUrl: "./addnewproduct.component.html",
@@ -29,7 +30,8 @@ export class AddnewproductComponent implements OnInit {
     private categeoryservice: CategeoryService,
     private toastController: ToastController,
     private productsService: ProductsService,
-    private router: Router
+    private router: Router,
+    private whiteSpaceValidator: WhiteSpaceValidator
   ) {}
 
   addNewProductForm: FormGroup;
@@ -47,6 +49,7 @@ export class AddnewproductComponent implements OnInit {
   multipleImages: [] = [];
   store_name;
   store_id;
+  imgidforpro;
 
   ngOnInit() {
     this.categeory = this.categeoryservice.getCategeory();
@@ -66,10 +69,22 @@ export class AddnewproductComponent implements OnInit {
 
   formInitializer() {
     this.addNewProductForm = this.formBuilder.group({
-      _id: [null],
-      name: ["", [Validators.required, , Validators.pattern("[a-zA-Z ]*")]],
+      _id: [],
+      name: [
+        "",
+        [
+          Validators.required,
+          ,
+          Validators.pattern("[a-zA-Z ]*"),
+          this.whiteSpaceValidator.spaceValidator,
+        ],
+      ],
       price: [null, [Validators.required]],
-      discription: [null, [Validators.required]],
+      discription: [
+        null,
+        [Validators.required, this.whiteSpaceValidator.spaceValidator],
+      ],
+
       catageory: [null],
       subCatageory: [null],
       sellername: [],
@@ -161,45 +176,52 @@ export class AddnewproductComponent implements OnInit {
   }
 
   async addNew() {
-    const cat = this.addNewProductForm.controls["catageory"].value;
-    this.categeorydup = this.categeory.filter((e) => e.id == cat);
-    if (this.categeorydup == null) {
-      console.log("can't find duplicate");
-    } else {
-      for (var i = 0; i < this.categeorydup.length; i++)
-        this.addNewProductForm.controls["catageory"].setValue(
-          this.categeorydup[i].name
-        );
-      const cata = this.addNewProductForm.controls["catageory"].value;
-      console.log("after updating catagory name", cata);
-    }
-    console.log("catageoryformvalue", cat);
-    const scat = this.addNewProductForm.controls["subCatageory"].value;
-    console.log("subcatageoryformvalue", scat);
-
-    const observable = await this.productsService.addNewProduct(
-      this.addNewProductForm.value
-    );
-    observable.subscribe(
-      (data) => {
-        console.log(
-          "got response from server product added successfully",
-          data
-        );
-
-        console.log("addnew subscribe ended");
-        this.a = true;
-
-        console.log("value of a in addnew", this.a);
-        this.upload();
-      },
-      (error) => {
-        this.loading = false;
-        this.modalCtrl.dismiss();
-
-        console.log("error in add new", error);
+    if (this.filePresent === true) {
+      const cat = this.addNewProductForm.controls["catageory"].value;
+      this.categeorydup = this.categeory.filter((e) => e.id == cat);
+      if (this.categeorydup == null) {
+        console.log("can't find duplicate");
+      } else {
+        for (var i = 0; i < this.categeorydup.length; i++)
+          this.addNewProductForm.controls["catageory"].setValue(
+            this.categeorydup[i].name
+          );
+        const cata = this.addNewProductForm.controls["catageory"].value;
+        console.log("after updating catagory name", cata);
       }
-    );
+      console.log("catageoryformvalue", cat);
+      const scat = this.addNewProductForm.controls["subCatageory"].value;
+      console.log("subcatageoryformvalue", scat);
+
+      const observable = await this.productsService.addNewProduct(
+        this.addNewProductForm.value
+      );
+      observable.subscribe(
+        (data) => {
+          console.log(
+            "got response from server product added successfully",
+            data
+          );
+          this.imgidforpro = data.data._id;
+
+          console.log("pro id after ading product", this.imgidforpro);
+          console.log("addnew subscribe ended");
+          this.a = true;
+
+          console.log("value of a in addnew", this.a);
+          this.upload();
+        },
+        (error) => {
+          this.loading = false;
+          this.modalCtrl.dismiss();
+
+          console.log("error in add new", error);
+        }
+      );
+    } else {
+      const mess = "Failed! Please Select an image first and Try Again! ";
+      this.toastservice.presenterrorToast(mess);
+    }
   }
 
   async updateProduct() {
@@ -210,20 +232,30 @@ export class AddnewproductComponent implements OnInit {
     observable.subscribe(
       async (data) => {
         console.log("got response from server for update products", data);
-        this.upload();
-
-        const name = this.addNewProductForm.controls["name"].value;
-        const toast = await this.toastController.create({
-          message: `${name} has been updated successfully.`,
-          duration: 3500,
-        });
-        toast.present();
+        if (data.message === "Updated Successfully") {
+          if (this.filePresent === true) {
+            this.upload();
+          } else {
+            const mess = "Success! Product Updated Successfully. ";
+            this.toastservice.presentpositiveToast(mess);
+            this.modalCtrl.dismiss();
+            this.loading = false;
+          }
+        }
       },
       (error) => {
-        this.loading = false;
-        this.modalCtrl.dismiss();
+        if (error.error.message === "Unprocessible Entity") {
+          if (this.filePresent === true) {
+            this.upload();
+          } else {
+            message: "Unprocessible Entity";
+            const msg = "Failed! Please Update Data and Try Again!";
+            this.toastservice.presenterrorToast(msg);
+            this.loading = false;
 
-        console.log("error", error);
+            console.log("error", error);
+          }
+        }
       }
     );
   }
@@ -237,15 +269,24 @@ export class AddnewproductComponent implements OnInit {
   }
 
   async upload() {
-    if (this.filePresent == true) {
+    if (this.filePresent === true) {
+      let _id;
       console.log("upload entered");
       const name = this.addNewProductForm.value["name"];
+      if (this.product) {
+        _id = this.addNewProductForm.controls["_id"].value;
+      } else {
+        _id = this.imgidforpro;
+      }
+
       console.log("name", name);
+      console.log("_id", _id);
       console.log("email", this.email);
       //console.log("image file checking before using user service",this.multipleImages);
       //const id = this.getLostData.controls._id;
 
       const observable = await this.productsService.uploadAvatar(
+        _id,
         name,
         this.email,
         this.multipleImages
@@ -255,21 +296,24 @@ export class AddnewproductComponent implements OnInit {
         (data) => {
           console.log("got response from server", data.message);
           if (
-            data.message == "Updated Successfully" ||
+            data.message === "Updated Successfully" ||
             "Created Successfully"
           ) {
-            console.log("return reached");
+            if (data.message === "Created Successfully") {
+              const msg = "Success! Product added Successfully.";
+              this.toastservice.presentpositiveToast(msg);
+            }
+            if (data.message === "Updated Successfully") {
+              const msg = "Success! Product Updated Successfully.";
+              this.toastservice.presentpositiveToast(msg);
+            }
 
-            this.b = true;
-            console.log("value of b in upload", this.b);
-            const msg = "Success! Product added Successfully.";
-            this.toastservice.presentpositiveToast(msg);
             this.loading = false;
             this.addNewProductForm.reset();
             //optional
             this.modalCtrl.dismiss();
 
-            if (this.store_id == null) {
+            if (this.store_id === null) {
               this.router.navigateByUrl("/products");
             } else {
               this.router.navigateByUrl("/store");
@@ -290,9 +334,38 @@ export class AddnewproductComponent implements OnInit {
 
       console.log("upload subscribe ended");
     } else {
-      const mess = "Failed! Please Select an image first and Try Again! ";
-      this.toastservice.presenterrorToast(mess);
+      if (this.product) {
+        const mess = "Failed! Please Select an image first and Try Again! ";
+        console.log(mess);
+      } else {
+        const mess = "Failed! Please Select an image first and Try Again! ";
+        this.toastservice.presenterrorToast(mess);
+      }
     }
+  }
+
+  onchange(event) {
+    console.log("event val without trim", event.target.value);
+
+    let check = event.target.value.trim();
+    console.log("check val trimmed", check);
+    event.target.value = "";
+    event.target.value = check;
+    console.log("event val ", event.target.value);
+    // check = check.trim();
+    // console.log("check", check);
+    // event.target.value = check;
+    // console.log("event val", event.target.value);
+  }
+
+  onchangetext(event) {
+    console.log("event val without trim", event.target.value);
+
+    let check = event.target.value.trimStart();
+    console.log("check val trimmed", check);
+    event.target.value = "";
+    event.target.value = check;
+    console.log("event val ", event.target.value);
   }
 
   onselect(e) {
@@ -305,18 +378,21 @@ export class AddnewproductComponent implements OnInit {
     } else {
       if (e.target.files) {
         this.multipleImages = e.target.files;
+        if (this.multipleImages.length === 0) {
+          this.filePresent = false;
+        } else {
+          console.log("multiple images before", this.multipleImages);
 
-        console.log("multiple images before", this.multipleImages);
+          for (let j = 0; j < e.target.files.length; j++) {
+            var reader = new FileReader();
 
-        for (let j = 0; j < e.target.files.length; j++) {
-          var reader = new FileReader();
-
-          reader.readAsDataURL(e.target.files[j]);
-          reader.onload = (events: any) => {
-            this.urls.push(events.target.result);
-          };
+            reader.readAsDataURL(e.target.files[j]);
+            reader.onload = (events: any) => {
+              this.urls.push(events.target.result);
+            };
+          }
+          this.filePresent = true;
         }
-        this.filePresent = true;
       }
     }
   }

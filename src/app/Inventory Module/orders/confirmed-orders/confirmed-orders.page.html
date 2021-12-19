@@ -1,118 +1,136 @@
-
 <ion-header>
-  
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button  defaultHref="orders"></ion-back-button>
+      <ion-back-button defaultHref="orders"></ion-back-button>
     </ion-buttons>
     <ion-title class="ion-text-center"> Confirmed Orders </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-        <ion-grid>
-        <ion-row
-          sizeLg="4"
-          sizeMd="4"
-          sizeXs="6"
-          *ngFor="let p of orders"
-          class="line"
-        >
-        <ion-card>
-          <ion-card-content>
-                    <ion-col size="4">
+  <ion-toolbar>
+    <ion-item class="dropdown">
+      <ion-label>SearchBy </ion-label>
+      <ion-select interface="popover" (ionChange)="onChange($event)">
+        <ion-select-option value="1">Order ID </ion-select-option>
+        <ion-select-option value="2">Product Name</ion-select-option>
+        <ion-select-option value="3">Seller Name</ion-select-option>
+        <ion-select-option value="4">Seller Email</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-searchbar
+      class="homeSearch"
+      (ionInput)="mySearch($event)"
+      slot="secondary"
+      autocomplete="off"
+      autocorrect="off"
+      [disabled]="!notfound"
+      spellcheck="true"
+      animated="true"
+      placeholder="{{searchph}}"
+      color="light"
+    ></ion-searchbar>
+  </ion-toolbar>
+
+  <ion-label class="labelclass" [hidden]="emptyarray">
+    Sorry Can Not Find Any Match !
+  </ion-label>
+
+  <ion-label class="labelclass" [hidden]="notfound">
+    Sorry You Do not have Any Confirmed Orders Yet !
+  </ion-label>
+
+  <ion-grid>
+    <ion-row
+      sizeLg="4"
+      sizeMd="4"
+      sizeXs="6"
+      *ngFor="let p of orders"
+      class="line"
+    >
+      <ion-card>
+        <ion-card-content>
+          <ion-col size="4">
             <img
               src="{{baseimageurl}}{{p.mainimage}}"
               failedUrl="image"
               onerror="this.src='assets/icon/book.png'"
             />
           </ion-col>
-    
+
           <ion-col size="8">
             <ion-row>
-              Order ID 
-              <ion-label id="pronamel">   
-                           <b>
-                             {{p._id}}
-                            </b>
+              Order ID
+              <ion-label id="pronamel">
+                <b> {{p._id}} </b>
               </ion-label>
-
-              </ion-row>
+            </ion-row>
             <ion-row>
-    Product Name 
-              <ion-label id="pronamel"color="secondary">
-                  {{p.productname}}
+              Product Name
+              <ion-label id="pronamel" color="secondary">
+                {{p.productname}}
               </ion-label>
-
-
-        </ion-row> 
+            </ion-row>
             <ion-row>
               Price :
-                  <ion-label id="pronamel" color="secondary">
-                   {{p.TotalAmount/p.productCount |currency:'PKR'}}</ion-label>
-    
-    
+              <ion-label id="quantity" color="secondary">
+                {{p.TotalAmount/p.productCount |currency:'PKR'}}</ion-label
+              >
+              Quantity:
+              <ion-label id="pronamel" color="secondary">
+                {{p.productCount }}
+              </ion-label>
             </ion-row>
-            
-  <ion-row>
-    <ion-col>
-    Quantity:
-    </ion-col>
-          
-      <ion-col>
-    <ion-label id="pronamel" color="secondary">
-      {{p.productCount }}</ion-label>
-      </ion-col>
-  
+
+            <ion-row>
+              Total amount:
+              <ion-label id="pronamel" color="secondary">
+                {{p.TotalAmount |currency:'PKR'}}
+              </ion-label>
+            </ion-row>
+
+            <ion-row>
+              Order Date :
+              <ion-label id="pronamel" color="secondary">
+                {{p.Date}}
+              </ion-label>
+            </ion-row>
+            <ion-row>
+              Order Time :
+              <ion-label id="pronamel" color="secondary"> {{p.Time}}</ion-label>
+            </ion-row>
+
+            <ion-row [hidden]="hid"> Order Delivered </ion-row>
+
+            <ion-row [hidden]="hid">
+              <ion-col>
+                <ion-button color="danger" fill="solid" (click)="cancel(p._id)">
+                  <ion-label>Cancel</ion-label>
+                  <ion-icon name="close-outline" slot="start"> </ion-icon>
+                </ion-button>
+              </ion-col>
+
+              <ion-col>
+                <ion-button
+                  color="secondary"
+                  fill="solid"
+                  (click)="confirmed(p._id)"
+                >
+                  <ion-label>Confirm</ion-label>
+                  <ion-icon name="checkmark-outline" slot="end"> </ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-button fill="solid" (click)="chat(p)">
+                <ion-label>Chat Now</ion-label>
+                <ion-icon name="chatbubbles-outline"></ion-icon>
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-card-content>
+      </ion-card>
     </ion-row>
-
-        <ion-row>
-          Total amount:
-       <ion-label id="pronamel" color="secondary">  {{p.TotalAmount |currency:'PKR'}} </ion-label>
-              </ion-row>
-
- <ion-row>
-    <ion-col>
-         Order Date :
-           <ion-label id="pronamel" color="secondary">    {{p.Date}} </ion-label>    
-    </ion-col>
-     <ion-col>   Order Time :
-         <ion-label id="pronamel" color="secondary">
-           {{p.Time}}</ion-label>
-    </ion-col>
-  </ion-row>
-
-  <ion-row [hidden]="hid">
-         Order Delivered 
-   </ion-row>
- 
-   <ion-row [hidden]="hid" >       
-  <ion-col> 
-    <ion-button color="danger" fill="solid" (click)="cancel(p._id)">
-        <ion-label >Cancel</ion-label>
-            <ion-icon name="close-outline" slot="start" > </ion-icon>
-    </ion-button>
-   </ion-col>
-
-   <ion-col>
-     <ion-button color="secondary" fill="solid" (click)="confirmed(p._id)">
-        <ion-label  >Confirm</ion-label>
-          <ion-icon name="checkmark-outline" slot="end" > </ion-icon>
-        </ion-button>
-   </ion-col>
-    </ion-row>
-
-      <ion-row>
-        <ion-button fill="solid" (click)="chat(p)">
-      <ion-label  >Chat Now</ion-label>
-      <ion-icon name="chatbubbles-outline"></ion-icon>
-         </ion-button>    
-      </ion-row>
- 
- </ion-col>
-</ion-card-content>
-</ion-card>
-
-</ion-row>
-</ion-grid>    
+  </ion-grid>
 </ion-content>

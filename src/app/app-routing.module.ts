@@ -17,6 +17,7 @@ const routes: Routes = [
   },
   {
     path: "home",
+    canActivate: [IsLoginGuard],
     children: [
       {
         path: "",
@@ -73,6 +74,14 @@ const routes: Routes = [
     loadChildren: () =>
       import("./Manage Profile Module/profile/profile.module").then(
         (m) => m.ProfilePageModule
+      ),
+  },
+  {
+    path: "usersprofile",
+    canActivate: [IsLoginGuard],
+    loadChildren: () =>
+      import("./Manage Profile Module/users-profile/users-profile.module").then(
+        (m) => m.UsersProfilePageModule
       ),
   },
   {

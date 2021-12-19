@@ -14,10 +14,10 @@ export class RedirectLoginGuard implements CanActivate {
     //const localtoken = await this.authService.getItemFromStorage(atoken);
     //console.log("access token in canactivate =", localtoken);
     const token = await this.authService.getTokenFromStorage(atoken);
-    console.log("access token in redirect canactivate =", token);
+
     if (token != null) {
       this.router.navigateByUrl("/home");
-      console.log("access token in canactivate =", false);
+
       return false;
     } else {
       return true;

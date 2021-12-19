@@ -4,6 +4,7 @@ import { AuthService } from "./auth.service";
 import { ProjectConfig } from "../Project.config";
 import { Injectable } from "@angular/core";
 import { tokenize } from "@angular/compiler/src/ml_parser/lexer";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -24,6 +25,16 @@ export class OrdersService {
     const atoken = "token";
     const token = await this.authService.getTokenFromStorage(atoken);
     const url = ProjectConfig.getPath() + "/Orders/" + id;
+    return this.http.get(url, {
+      headers: new HttpHeaders().set("Authorization", token),
+    });
+  }
+
+  public async checkOrderPaymentStatus(id): Promise<any> {
+    const atoken = "token";
+    const token = await this.authService.getTokenFromStorage(atoken);
+    const url =
+      ProjectConfig.getPath() + "/Orders/checkOrderPaymentStatus/" + id;
     return this.http.get(url, {
       headers: new HttpHeaders().set("Authorization", token),
     });
@@ -53,6 +64,17 @@ export class OrdersService {
     const token = await this.authService.getTokenFromStorage(atoken);
     const url = ProjectConfig.getPath() + "/Orders/ConfirmPayment";
     console.log("token in orders service", token);
+    return this.http.post(url, data, {
+      headers: new HttpHeaders().set("Authorization", token),
+    });
+  }
+
+  public async UpdateOrderAfterPayment(data: object, _id): Promise<any> {
+    const atoken = "token";
+    const url =
+      ProjectConfig.getPath() + "/Orders/Updateorderafterpayment/" + _id;
+    const token = await this.authService.getTokenFromStorage(atoken);
+
     return this.http.post(url, data, {
       headers: new HttpHeaders().set("Authorization", token),
     });

@@ -20,7 +20,7 @@ export class IsLoginGuard implements CanActivate {
     // const localtoken = await this.authService.getItemFromStorage(atoken);
     // console.log("access token in islogin.guard", localtoken);
     const token = await this.authService.getTokenFromStorage(atoken);
-    console.log("access token in islogin.guard", token);
+
     //if (!token) {
     if (!token) {
       const msg = "Please Login first to go ahead. Error!";

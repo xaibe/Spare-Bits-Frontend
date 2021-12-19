@@ -12,6 +12,7 @@ import { UserService } from "src/sdk/core/user.service";
 import { ToastService } from "../sdk/custom/toast.service";
 import { BehaviorSubject } from "rxjs";
 import { cartService } from "src/sdk/custom/cart.service";
+import { LoaderService } from "src/sdk/custom/loader.service";
 
 @Component({
   selector: "app-root",
@@ -76,6 +77,7 @@ export class AppComponent {
   ];
   fetchedemail: any;
   avatar;
+  email;
   constructor(
     private platform: Platform,
     private sideMenuService: SideMenuService,
@@ -87,7 +89,8 @@ export class AppComponent {
     private router: Router,
     private userService: UserService,
     private toastService: ToastService,
-    private cartService: cartService
+    private cartService: cartService,
+    private loaderService: LoaderService
   ) {
     this.initializeApp();
     this.cartItemCount = this.cartService.getCartItemCount();
@@ -97,9 +100,51 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.getemail();
       //      this.storage.clear();
       //    localStorage.removeItem("name");
     });
+  }
+
+  getemail() {
+    const semail = "email";
+    this.authService
+      .getTokenFromStorage(semail)
+      .then((data) => {
+        this.email = data;
+        if (this.email === null || this.email === undefined) {
+          console.log("retrieved email in app component ", this.email);
+        } else {
+          console.log("retrieved email in app component ", this.email);
+          this.Validateuser(this.email);
+        }
+      })
+      .catch((error) => {
+        console.log("fethching name error", error);
+      });
+  }
+  async Validateuser(email) {
+    const observable = await this.userService.getSingleUser(email);
+    observable.subscribe(
+      async (data) => {
+        console.log("user  validated in app component", data);
+        this.ngOnInit();
+      },
+      (error) => {
+        this.storage.clear();
+        localStorage.removeItem("name");
+        localStorage.removeItem("avatar");
+        this.authService.logout();
+        this.loaderService.hideLoader();
+        console.log("recieveing user id err", error);
+        if (error.status === 401 || error.status === 404) {
+        } else {
+          console.log(error.message);
+          const mess = "Please Check Your Internet Connection and Try Again ";
+          this.toastService.presenterrorToast(mess);
+        }
+      }
+    );
   }
 
   getname() {
@@ -151,6 +196,7 @@ export class AppComponent {
   sidemenuservicefunction() {
     this.sideMenuService.getObservable().subscribe((data) => {
       this.name = data.name;
+      console.log("name in side menu service", this.name);
       try {
         if (data.avatar === null || data.avatar === undefined) {
           if (data.name === null || data.name === undefined) {
@@ -167,10 +213,11 @@ export class AppComponent {
     });
   }
   ngOnInit() {
-    this.userexist = true;
-    this.getname();
     if (this.userexist) {
+      this.getname();
+      this.sidemenuservicefunction();
     } else {
+      this.getname();
       this.sidemenuservicefunction();
     }
   }

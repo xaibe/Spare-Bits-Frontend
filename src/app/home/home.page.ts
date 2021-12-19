@@ -9,6 +9,7 @@ import {
   SafeResourceUrl,
   SafeUrl,
 } from "@angular/platform-browser";
+import { LoaderService } from "src/sdk/custom/loader.service";
 import { ProjectConfig } from "src/sdk/Project.config";
 import { AppComponent } from "../app.component";
 @Component({
@@ -28,9 +29,10 @@ export class HomePage implements OnInit {
   skeletonlist = [1, 2, 3, 4, 5];
   selectedProduct: Products;
   image;
-
+  notfound;
   name;
   constructor(
+    private loaderService: LoaderService,
     private router: Router,
     private productsService: ProductsService,
     private modalController: ModalController,
@@ -41,9 +43,11 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.notfound = true;
+    this.emptyarray = true;
     try {
-      const result = this.appComponent.ngOnInit();
-      console.log("result", result);
+      this.appComponent.ngOnInit();
+
       this.getAll();
     } catch (ERROR) {
       console.log("error in products fetching", Error);
@@ -53,6 +57,7 @@ export class HomePage implements OnInit {
   baseimageurl = ProjectConfig.getPath() + "//uploadproduct//";
 
   async getAll() {
+    this.notfound = true;
     console.log("gett all entered");
     this.loading = true;
 
@@ -65,6 +70,11 @@ export class HomePage implements OnInit {
         this.productsBackup = this.products;
         console.log("Data received", this.products);
         console.log("Data received", this.products);
+        if (this.products.length === 0) {
+          this.notfound = false;
+        } else {
+          this.notfound = true;
+        }
         //  this.image = 'http://localhost:3000' + '/uploadproduct/' + data.name;
         //  console.log('imageurl:', this.image);
       },
@@ -88,9 +98,10 @@ export class HomePage implements OnInit {
   // }
 
   mySearch(ev: any) {
-    this.products = this.productsBackup;
-    this.emptyarray = "";
     const search = ev.target.value;
+
+    this.products = this.productsBackup;
+    this.emptyarray = true;
 
     if (search && search.trim() != "") {
       this.searchArray = this.products.filter((item) => {
@@ -98,7 +109,7 @@ export class HomePage implements OnInit {
       });
       if (this.searchArray.length == 0) {
         console.log("empty array", this.searchArray);
-        this.emptyarray = "Can't Find Any Match ";
+        this.emptyarray = false;
         this.products = this.searchArray;
         this.loading = false;
       } else {
@@ -107,6 +118,9 @@ export class HomePage implements OnInit {
       }
     } else {
       console.log("empty searchbox", search);
+
+      // Reset the field
+      ev.target.value = "";
       this.products = this.productsBackup;
       this.loading = false;
     }
@@ -116,9 +130,9 @@ export class HomePage implements OnInit {
     // add edit page
   }
 
-  changeUrl(user) {
-    const id = user._id;
-    console.log("userid", id);
+  changeUrl(product) {
+    const id = product._id;
+    console.log("product", id);
     const url = `home/${id}`;
 
     this.router.navigateByUrl(url);

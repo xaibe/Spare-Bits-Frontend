@@ -2,31 +2,85 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="home"></ion-back-button>
-  </ion-buttons>
+    </ion-buttons>
     <ion-title id="pagename" class="ion-text-center">Chats</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card  *ngFor="let contact of contacts">
-<ion-card-content  class="ion-text-center" >
-  <img  class="image" (click)="openchat(contact)" *ngIf="contact.user_id !== userid"
-    width="50px" height="50px" src="{{baseimageurl}}{{contact.user_imageUrl}}" 
-  failedUrl="image" onerror="this.src='assets/icon/avatar.jpg'"/>
-  
-  <img class="image"  (click)="openchat(contact)" *ngIf="contact.contacted_userid !== userid"
-  width="50px" height="50px" src="{{baseimageurl}}{{contact.contacteduser_imageUrl}}" 
-  failedUrl="image" onerror="this.src='assets/icon/avatar.jpg'"/>
-  
-  <label class="name" *ngIf="contact.user_id !== userid" (click)="openchat(contact)">{{contact.user_name}}</label>
-  <label class="name" *ngIf="contact.contacted_userid !== userid" (click)="openchat(contact)">{{contact.contacteduser_name}}</label>
+  <ion-toolbar>
+    <ion-searchbar
+      class="homeSearch"
+      (ionInput)="mySearch($event)"
+      slot="secondary"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="true"
+      [disabled]="!notfound"
+      animated="true"
+      color="light"
+      placeholder="Search By Product Name"
+    ></ion-searchbar>
+    <!-- autocomplete="true" spellcheck="true"  -->
+  </ion-toolbar>
 
-  <ion-button class="buttonicon" fill="clear" slot="end" (click)="delete(contact)" >
-    <ion-icon name="trash" ></ion-icon>
-  </ion-button>  
-  
-  <div class="time" text-right><br>{{ contact.updatedAt | date:'short' }}</div>
-</ion-card-content>
+  <ion-label class="labelclass" [hidden]="emptyarray">
+    Sorry Can Not Find Any Match !
+  </ion-label>
+
+  <ion-label class="labelclass" [hidden]="notfound">
+    Sorry You Have not Started Any Chat Yet !
+  </ion-label>
+
+  <ion-card *ngFor="let contact of contacts">
+    <ion-card-content class="ion-text-center">
+      <img
+        class="image"
+        (click)="openchat(contact)"
+        *ngIf="contact.user_id !== userid"
+        width="50px"
+        height="50px"
+        src="{{baseimageurl}}{{contact.user_imageUrl}}"
+        failedUrl="image"
+        onerror="this.src='assets/icon/avatar.jpg'"
+      />
+
+      <img
+        class="image"
+        (click)="openchat(contact)"
+        *ngIf="contact.contacted_userid !== userid"
+        width="50px"
+        height="50px"
+        src="{{baseimageurl}}{{contact.contacteduser_imageUrl}}"
+        failedUrl="image"
+        onerror="this.src='assets/icon/avatar.jpg'"
+      />
+
+      <label
+        class="name"
+        *ngIf="contact.user_id !== userid"
+        (click)="openchat(contact)"
+        >{{contact.user_name}}</label
+      >
+      <label
+        class="name"
+        *ngIf="contact.contacted_userid !== userid"
+        (click)="openchat(contact)"
+        >{{contact.contacteduser_name}}</label
+      >
+
+      <ion-button
+        class="buttonicon"
+        fill="clear"
+        slot="end"
+        (click)="delete(contact)"
+      >
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+
+      <div class="time" text-right>
+        <br />{{ contact.updatedAt | date:'short' }}
+      </div>
+    </ion-card-content>
   </ion-card>
-  
 </ion-content>

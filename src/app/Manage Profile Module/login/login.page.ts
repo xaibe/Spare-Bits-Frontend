@@ -7,6 +7,7 @@ import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastService } from "./../../../sdk/custom/toast.service";
 import { UserService } from "../../../sdk/core/user.service";
+import { WhiteSpaceValidator } from "src/sdk/custom/whitespacevalidator.service";
 
 @Component({
   selector: "app-login",
@@ -20,11 +21,13 @@ export class LoginPage implements OnInit {
     private userService: UserService,
     private router: Router,
     private toastService: ToastService,
-    private authService: AuthService
+    private authService: AuthService,
+    private whiteSpaceValidator: WhiteSpaceValidator
   ) {}
   loginForm: FormGroup;
   loading = false;
   clicked = false;
+  disabled = false;
   userid;
   check;
   ngOnInit() {
@@ -34,8 +37,18 @@ export class LoginPage implements OnInit {
 
   formInitializer() {
     this.loginForm = this.formBuilder.group({
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required]],
+      email: [
+        null,
+        [
+          Validators.required,
+          Validators.email,
+          this.whiteSpaceValidator.spaceValidator,
+        ],
+      ],
+      password: [
+        null,
+        [Validators.required, this.whiteSpaceValidator.spaceValidator],
+      ],
     });
   }
 
@@ -69,14 +82,17 @@ export class LoginPage implements OnInit {
       },
       (error) => {
         console.log("recieveing user id err", error);
-        if (error.error.message === "Failed") {
+        if (error.status === 401 || error.status === 404) {
           const msg = "User Doen't exists Please Signup First ";
           this.toastService.presenterrorToast(msg);
-
+          this.disabled = false;
           this.loading = false;
           this.clicked = false;
         } else {
-          this.toastService.presenterrorToast(error.error.message);
+          console.log(error.message);
+          const mess = "Please Check Your Internet Connection and Try Again ";
+          this.toastService.presenterrorToast(mess);
+          this.disabled = false;
           this.loading = false;
           this.clicked = false;
         }
@@ -102,6 +118,7 @@ export class LoginPage implements OnInit {
         this.toastService.presentpositiveToast(data.message);
         this.loading = false;
         this.clicked = false;
+        this.disabled = false;
         this.authService.saveTokenToStorage(id, this.userid);
         this.authService.saveTokenToStorage(token, data.token);
         //  this.authService.SetItemtoStorage(token, data.token);
@@ -121,6 +138,7 @@ export class LoginPage implements OnInit {
           " /users/login: 0 Unknown Error";
         if (error.message === this.check) {
           this.loginForm.reset();
+          this.disabled = false;
           this.clicked = false;
           this.loading = false;
           console.log("error", error);
@@ -128,6 +146,7 @@ export class LoginPage implements OnInit {
           this.toastService.presenterrorToast(mess);
         } else {
           this.loginForm.reset();
+          this.disabled = false;
           this.clicked = false;
           this.loading = false;
           console.log("error", error);
@@ -140,6 +159,7 @@ export class LoginPage implements OnInit {
 
   save() {
     const demail = this.loginForm.value["email"];
+    this.disabled = true;
     this.clicked = true;
     console.log("demail", demail);
     this.getuserid(demail);

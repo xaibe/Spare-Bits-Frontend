@@ -35,7 +35,7 @@ export class AuthService {
     return await this.storage.remove(name);
   }
   public clearLocalStorage() {
-    this.storage.clear();
+    localStorage.clear();
   }
   public async logout() {
     this.storage.clear();

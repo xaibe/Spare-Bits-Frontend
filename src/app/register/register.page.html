@@ -25,6 +25,7 @@
               <ion-input
                 name="name"
                 formControlName="name"
+                (ionInput)="onchange($event)"
                 type="text"
                 placeholder="Name"
               ></ion-input>
@@ -32,29 +33,88 @@
             <ion-item>
               <ion-input
                 name="email"
+                [disabled]="blockemail"
+                (ionInput)="onchange($event)"
                 formControlName="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="Email"
               ></ion-input>
             </ion-item>
+
             <ion-item>
               <ion-input
-                name="mnumber"
-                type="tel"
+                name="mnumber "
+                inputmode="tel"
+                formControlName="mnumber"
                 pattern="[0-9]*"
+                type="tel"
                 placeholder="Mobile Number"
                 maxlength="11"
-                formControlName="mnumber"
-              ></ion-input>
+                minlength="11"
+              >
+              </ion-input>
             </ion-item>
+
+            <ion-item>
+              <ion-textarea
+                auto-grow="true"
+                name="Address1"
+                type="text"
+                placeholder="Address1"
+                (ionInput)="onchangetext($event)"
+                formControlName="Address1"
+              >
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-textarea
+                auto-grow="true"
+                (ionInput)="onchangetext($event)"
+                formControlName="Address2"
+                name="Address2"
+                type="text"
+                placeholder="Address2"
+              >
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-textarea
+                name="Province"
+                type="text"
+                placeholder="State/Province"
+                auto-grow="true"
+                (ionInput)="onchangetext($event)"
+                formControlName="Province"
+              >
+              </ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-textarea
+                name="City"
+                type="text"
+                placeholder="City"
+                auto-grow="true"
+                formControlName="City"
+                (ionInput)="onchangetext($event)"
+              >
+              </ion-textarea>
+            </ion-item>
+
             <ion-item>
               <ion-input
-                name="address"
-                type="text"
-                placeholder="Address"
-                formControlName="address"
+                placeholder="Zipcode"
+                inputmode="tel"
+                pattern="[0-9]*"
+                type="tel"
+                maxlength="5"
+                minlength="5"
+                formControlName="Zipcode"
               ></ion-input>
             </ion-item>
+
             <ion-item>
               <ion-input
                 name="password"
@@ -71,6 +131,18 @@
                 placeholder="Password"
               >
               </ion-input>
+            </ion-item>
+
+            <ion-item [hidden]="!startverify">
+              <ion-input
+                placeholder="Verifycode"
+                inputmode="tel"
+                pattern="[0-9]*"
+                type="tel"
+                maxlength="4"
+                minlength="4"
+                formControlName="verifycode"
+              ></ion-input>
             </ion-item>
           </div>
 
@@ -97,14 +169,27 @@
 </ion-button>
 
 </div> -->
+
           <div class="ion-padding">
             <ion-button (click)="login()" color="primary">Login </ion-button>
             <ion-button
-              [disabled]="registerForm.invalid"
+              [disabled]="registerForm.invalid || clicked"
               (click)="save()"
               color="primary"
+              [hidden]="startverify"
               type="submit"
               >Register
+              <ion-spinner name="bubbles" *ngIf="clicked"></ion-spinner>
+            </ion-button>
+
+            <ion-button
+              [disabled]=" clicked"
+              (click)="verify()"
+              color="primary"
+              [hidden]="!startverify"
+              type="submit"
+            >
+              Verify
               <ion-spinner name="bubbles" *ngIf="clicked"></ion-spinner>
             </ion-button>
           </div>

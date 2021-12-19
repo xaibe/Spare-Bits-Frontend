@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="singleproduct"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"> Profile </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="getProfileData">
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div class="container" *ngIf="clickededit">
+            <div class="outer">
+              <img
+                class="profile-picture"
+                [src]="img"
+                width="150px"
+                height="150px"
+                onerror="this.onerror=null;this.src='/assets/icon/avatar.jpg';"
+              />
+              <div class="inner">
+                <input
+                  class="inputfile"
+                  type="file"
+                  name="pic"
+                  accept="image/*"
+                  (change)="onselect($event)"
+                />
+                <ion-icon class="camicon" name="camera-outline"></ion-icon>
+              </div>
+            </div>
+          </div>
+
+          <div class="ion-text-center" *ngIf="!clickededit">
+            <img
+              class="profile-picture"
+              src="{{baseimageurl}}{{img}}"
+              width="150px"
+              height="150px"
+              failedUrl="image"
+              onerror="this.src='/assets/icon/avatar.jpg'"
+            />
+          </div>
+
+          <div style="position: relative; top: 40px">
+            <ion-label style="color: #0cd1e8" position="stacked"
+              >Name</ion-label
+            >
+
+            <ion-label id="lab" class="ion-text-center"
+              >{{dataretrieved?.data?.name}}</ion-label
+            >
+            <br />
+          </div>
+
+          <div style="position: relative; top: 80px">
+            <ion-label style="color: #0cd1e8" position="stacked"
+              >Email</ion-label
+            >
+
+            <ion-label id="lab" class="ion-text-center"
+              >{{dataretrieved?.data?.email}}</ion-label
+            >
+            <br />
+          </div>
+
+          <div style="position: relative; top: 120px">
+            <ion-label style="color: #0cd1e8" position="stacked"
+              >Mobile Number</ion-label
+            >
+
+            <ion-label id="lab" class="ion-text-center"
+              >{{dataretrieved?.data?.mnumber}}</ion-label
+            >
+            <br />
+          </div>
+
+          <!-- div for address -->
+          <div style="position: relative; top: 160px; width: 100%">
+            <ion-label style="color: #0cd1e8" position="absolute"
+              >Address</ion-label
+            >
+
+            <ion-label id="lab" class="ion-text-center">
+              {{userAddress}}
+            </ion-label>
+          </div>
+
+          <div class="ion-text-center" id="footer">
+            <p>Copyright 2021. All rights reserved.</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
